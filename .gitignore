@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE folders
+.vscode/
+.idea/
+*.suo
+*.user
+*.cache
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Sensitive configs
+.env
+config.json
