@@ -1,3 +1,4 @@
+import time
 from ollama_client import OllamaClient
 from agent import Agent
 from debate_engine import DebateEngine
@@ -26,14 +27,18 @@ def main():
     # Set up debate
     engine = DebateEngine(
         agents=[agent_a, agent_b],
-        rounds=4
+        rounds=4  # you can tweak this later
     )
 
-    # Run debate
-    final_log = engine.run(user_prompt)
+    # Run debate with timing
+    debate_start = time.time()
+    debate_log = engine.run(user_prompt)
+    debate_end = time.time()
+
+    print(f"\nDebate completed in {debate_end - debate_start:.2f} seconds.")
 
     print("\n=== FULL DEBATE LOG ===\n")
-    print(final_log)
+    print(debate_log)
 
 
 if __name__ == "__main__":

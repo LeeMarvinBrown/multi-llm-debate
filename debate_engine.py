@@ -18,8 +18,8 @@ class DebateEngine:
 
         for r in range(self.rounds):
             for agent in self.agents:
-                reply = agent.reply(history)
+                reply, duration = agent.reply(history)
                 history += f"{agent.name}: {reply}\n\n"
-                print(f"[Round {r+1}] {agent.name} replied.")
+                print(f"[Round {r+1}] {agent.name} replied in {duration:.2f} seconds.")
 
         return history
