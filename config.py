@@ -18,3 +18,6 @@ AGENTS = [
         "role": "skeptical logical analyst who critiques Agent A",
     },
 ]
+
+# Max tokens each agent is allowed to generate per reply
+MAX_TOKENS_PER_REPLY = 256

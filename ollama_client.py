@@ -1,6 +1,8 @@
 import requests
 import json
 from typing import List, Dict
+import config  # <-- import your config
+
 
 class OllamaClient:
     """
@@ -18,10 +20,17 @@ class OllamaClient:
         url = f"{self.base_url}/api/generate"
         data = {
             "model": model,
-            "prompt": prompt
+            "prompt": prompt,
+            "options": {
+                "num_predict": config.MAX_TOKENS_PER_REPLY,
+                # You can experiment with these later if you want:
+                # "temperature": 0.7,
+                # "repeat_penalty": 1.1,
+            },
         }
 
         response = requests.post(url, json=data, stream=True)
+        response.raise_for_status()  # optional: raise error if request failed
 
         full_output = ""
         for line in response.iter_lines():
