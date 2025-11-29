@@ -17,9 +17,21 @@ class DebateEngine:
         history = f"User: {user_prompt}\n\n"
 
         for r in range(self.rounds):
-            for agent in self.agents:
+            # r starts at 0 → for 4 rounds: 4, 3, 2, 1
+            rounds_remaining = self.rounds - r
+
+            for i, agent in enumerate(self.agents):
                 reply, duration = agent.reply(history)
                 history += f"{agent.name}: {reply}\n\n"
-                print(f"[Round {r+1}] {agent.name} replied in {duration:.2f} seconds.")
+
+                if i == 0:
+                    # First agent each round (Agent A)
+                    label = "round" if rounds_remaining == 1 else "rounds"
+                    print(
+                        f"[Round {r+1}] {agent.name} replied in {duration:.2f} seconds. "
+                        f"{rounds_remaining} {label} remaining."
+                    )
+                else:
+                    print(f"[Round {r+1}] {agent.name} replied in {duration:.2f} seconds.")
 
         return history
