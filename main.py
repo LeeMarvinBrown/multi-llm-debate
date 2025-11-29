@@ -1,35 +1,40 @@
-import requests
-import json
+from ollama_client import OllamaClient
+from agent import Agent
+from debate_engine import DebateEngine
 
-def ask_ollama(model: str, prompt: str) -> str:
-    """
-    Send a simple generate request to the local Ollama server
-    and return the full response text.
-    """
-    url = "http://localhost:11434/api/generate"
-    data = {
-        "model": model,
-        "prompt": prompt
-    }
+def main():
+    client = OllamaClient()
 
-    # stream=True lets us read chunks as they come
-    response = requests.post(url, json=data, stream=True)
+    # Define two agents
+    agent_a = Agent(
+        name="Agent A",
+        role="optimistic creative problem-solver",
+        model="llama3:8b",
+        client=client
+    )
 
-    full_output = ""
-    for line in response.iter_lines():
-        if line:
-            obj = json.loads(line.decode("utf-8"))
-            if "response" in obj:
-                full_output += obj["response"]
-    return full_output
+    agent_b = Agent(
+        name="Agent B",
+        role="skeptical logical analyst who critiques Agent A",
+        model="llama3:8b",
+        client=client
+    )
+
+    # Ask user for a prompt
+    user_prompt = input("Enter your question or topic: ")
+
+    # Set up debate
+    engine = DebateEngine(
+        agents=[agent_a, agent_b],
+        rounds=4
+    )
+
+    # Run debate
+    final_log = engine.run(user_prompt)
+
+    print("\n=== FULL DEBATE LOG ===\n")
+    print(final_log)
 
 
 if __name__ == "__main__":
-    prompt = "Hello! Write me a short poem about futuristic trees."
-    answer = ask_ollama("llama3:8b", prompt)
-
-    print("\nPROMPT:\n")
-    print(prompt)
-
-    print("\nMODEL RESPONSE:\n")
-    print(answer)
+    main()
